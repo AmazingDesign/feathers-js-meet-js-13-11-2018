@@ -5,13 +5,21 @@ const { disablePagination } = require('feathers-hooks-common');
 module.exports = {
   before: {
     all: [],
-    find: [disablePagination()],
+    find: [
+      disablePagination()
+    ],
     get: [],
     create: [
       // it CAN be async https://docs.feathersjs.com/api/hooks.html#asynchronous-hooks
       (context) => {
         // https://docs.feathersjs.com/api/hooks.html#hook-context
         context.data.timestamp = Date.now();
+      },
+      // hooks will be executed one after another
+      (context) => {
+        if (context.params.user) {
+          context.data.auth = true;
+        }
       }
     ],
     update: [],
@@ -21,7 +29,13 @@ module.exports = {
 
   after: {
     all: [],
-    find: [],
+    find: [
+      (context) => {
+        if (!context.params.user) {
+          context.result = context.result.filter(message => !message.auth);
+        }
+      }
+    ],
     get: [],
     create: [],
     update: [],

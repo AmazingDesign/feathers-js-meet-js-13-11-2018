@@ -35,7 +35,10 @@ export const initMessagesSyncAction = () => (dispatch, getState) => {
     .service('messages')
     .on(
       'created',
-      message => fetchMessages()
+      message => {
+        console.log('Received message created event with message: ', message)
+        fetchMessages()
+      }
     )
 }
 
