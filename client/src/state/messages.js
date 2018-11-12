@@ -50,7 +50,6 @@ export const sendNewMessageAction = newMessageText => (dispatch, getState) => {
 
   app.service('messages').create({
     text: newMessageText,
-    timestamp: Date.now(),
     author
   })
 }
