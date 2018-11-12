@@ -19,11 +19,11 @@ class Auth extends React.Component {
 
   anonymousLogInHandler = () => {
     if (!this.state.anonymousName) {
-      alert('Please type your name')
+      alert('Please type your name!')
       return
     }
 
-    this.props._anonymousLogInAction(this.state.newName)
+    this.props._anonymousLogInAction(this.state.anonymousName)
   }
 
   logInHandler = () => {
