@@ -1,26 +1,41 @@
 import React from 'react'
 
-import LogInBox from './LogInBox'
+import AnonymousLogInBox from './AnonymousLogInBox'
+import PasswordLogInBox from './PasswordLogInBox'
 
 import { connect } from 'react-redux'
-import { logInAction } from '../state/auth'
+import { logInAsyncAction, anonymousLogInAction } from '../state/auth'
 
 class Auth extends React.Component {
   state = {
-    newName: ''
+    anonymousName: '',
+    email: '',
+    password: ''
   }
 
-  newNameChangeHandler = (event) => this.setState({
-    newName: event.target.value
+  makeInputChangeHandler = (statePropName) => (event) => this.setState({
+    [statePropName]: event.target.value
   })
 
-  logInHandler = () => {
-    if (!this.state.newName) {
+  anonymousLogInHandler = () => {
+    if (!this.state.anonymousName) {
       alert('Please type your name')
       return
     }
 
-    this.props._logInAction(this.state.newName)
+    this.props._anonymousLogInAction(this.state.newName)
+  }
+
+  logInHandler = () => {
+    if (
+      !this.state.email ||
+      !this.state.password
+    ) {
+      alert('Please type your email and password!')
+      return
+    }
+
+    this.props._logInAsyncAction(this.state.email, this.state.password)
   }
 
   render() {
@@ -28,11 +43,19 @@ class Auth extends React.Component {
       this.props._user ?
         this.props.children
         :
-        <LogInBox
-          onLogInClick={this.logInHandler}
-          onNewNameChange={this.newNameChangeHandler}
-          newName={this.state.newName}
-        />
+        <div>
+          <AnonymousLogInBox
+            onLogInClick={this.anonymousLogInHandler}
+            onNewNameChange={this.makeInputChangeHandler('anonymousName')}
+            newName={this.state.anonymousName}
+          />
+          <PasswordLogInBox
+            onLogInClick={this.logInHandler}
+            onEmailChange={this.makeInputChangeHandler('email')}
+            onPasswordChange={this.makeInputChangeHandler('password')}
+            newName={this.state.newName}
+          />
+        </div>
     )
   }
 }
@@ -42,7 +65,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  _logInAction: name => dispatch(logInAction(name))
+  _logInAsyncAction: (email, password) => dispatch(logInAsyncAction(email, password)),
+  _anonymousLogInAction: name => dispatch(anonymousLogInAction(name))
 })
 
 export default connect(
