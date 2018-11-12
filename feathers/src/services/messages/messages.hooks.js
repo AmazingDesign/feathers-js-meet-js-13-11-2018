@@ -1,6 +1,7 @@
 
 // https://github.com/feathers-plus/feathers-hooks-common
 const { disablePagination } = require('feathers-hooks-common');
+const addTimestamp = require('../../hooks/addTimestamp');
 
 module.exports = {
   before: {
@@ -11,15 +12,16 @@ module.exports = {
     get: [],
     create: [
       // it CAN be async https://docs.feathersjs.com/api/hooks.html#asynchronous-hooks
-      (context) => {
-        // https://docs.feathersjs.com/api/hooks.html#hook-context
-        context.data.timestamp = Date.now();
-      },
+      addTimestamp(),
       // hooks will be executed one after another
       (context) => {
+        // https://docs.feathersjs.com/api/hooks.html#hook-context
         if (context.params.user) {
           context.data.auth = true;
         }
+      },
+      (context) => {
+        context.data.avatar = `https://api.adorable.io/avatars/40/${context.data.author}`;
       }
     ],
     update: [],
