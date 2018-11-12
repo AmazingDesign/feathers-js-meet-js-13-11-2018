@@ -4,6 +4,7 @@ const NewMessageBox = (props) => (
   <div>
     <input
       type="text"
+      placeholder="Type message"
       onChange={props.onNewMessageChange}
       value={props.newMessageText}
     />

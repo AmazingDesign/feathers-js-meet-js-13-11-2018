@@ -45,6 +45,7 @@ class Chat extends Component {
           onNewMessageChange={this.newMessageChangeHandler}
           newMessageText={this.state.newMessageText}
         />
+        <hr />
         {
           this.props._messages ?
             <MessagesList
