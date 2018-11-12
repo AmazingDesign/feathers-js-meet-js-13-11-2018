@@ -1,5 +1,6 @@
 
 // https://github.com/feathers-plus/feathers-hooks-common
+// https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#disablepagination
 const { disablePagination } = require('feathers-hooks-common');
 const addTimestamp = require('../../hooks/addTimestamp');
 
@@ -33,6 +34,7 @@ module.exports = {
     all: [],
     find: [
       (context) => {
+        console.log(context.result)
         if (!context.params.user) {
           context.result = context.result.filter(message => !message.auth);
         }
