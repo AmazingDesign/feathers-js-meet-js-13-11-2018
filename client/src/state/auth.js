@@ -1,6 +1,7 @@
 import app from '../feathers'
 
 const LOGIN = 'auth/LOGIN'
+const LOGOUT = 'auth/LOGOUT'
 
 export const logInAction = (name) => ({
   type: LOGIN,
@@ -28,8 +29,7 @@ export const tryToLogInWithJWT = () => (dispatch, getState) => {
       console.log('User', app.get('user'))
     })
     .catch((error) => {
-      console.log(error)
-      alert(`Error with log in! Message from server: ${error.data.message}`)
+      console.log('Login with JWT from local storage failed:', error)
     })
 }
 
@@ -59,6 +59,14 @@ export const logInAsyncAction = (email, password) => (dispatch, getState) => {
     })
 }
 
+const logoutAction = () => ({ type: LOGOUT })
+
+export const logoutAsyncAction = () => (dispatch, getState) => {
+  app.logout()
+    .then(() => dispatch(logoutAction()))
+
+}
+
 const initialState = {
   user: null
 }
@@ -69,6 +77,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         user: action.name
+      }
+    case LOGOUT:
+      return {
+        ...state,
+        user: initialState.user
       }
     default:
       return state

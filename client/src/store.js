@@ -19,4 +19,4 @@ export const store = createStore(
 )
 
 // if we want to persist session of logged user 
-// store.dispatch(tryToLogInWithJWT())
+store.dispatch(tryToLogInWithJWT())

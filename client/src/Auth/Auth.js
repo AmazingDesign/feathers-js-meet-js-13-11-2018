@@ -4,7 +4,7 @@ import AnonymousLogInBox from './AnonymousLogInBox'
 import PasswordLogInBox from './PasswordLogInBox'
 
 import { connect } from 'react-redux'
-import { logInAsyncAction, anonymousLogInAction } from '../state/auth'
+import { logInAsyncAction, anonymousLogInAction, logoutAsyncAction } from '../state/auth'
 
 class Auth extends React.Component {
   state = {
@@ -41,7 +41,14 @@ class Auth extends React.Component {
   render() {
     return (
       this.props._user ?
-        this.props.children
+        <div>
+          <button
+            onClick={this.props._logoutAsyncAction}
+          >
+            LOGOUT
+          </button>
+          {this.props.children}
+        </div>
         :
         <div>
           <AnonymousLogInBox
@@ -66,7 +73,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   _logInAsyncAction: (email, password) => dispatch(logInAsyncAction(email, password)),
-  _anonymousLogInAction: name => dispatch(anonymousLogInAction(name))
+  _anonymousLogInAction: name => dispatch(anonymousLogInAction(name)),
+  _logoutAsyncAction: () => dispatch(logoutAsyncAction())
 })
 
 export default connect(
