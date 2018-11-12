@@ -1,7 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
-import auth from './state/auth'
+import auth, { tryToLogInWithJWT } from './state/auth'
 import messages from './state/messages'
 
 const reducer = combineReducers({
@@ -17,3 +17,6 @@ export const store = createStore(
     applyMiddleware(thunk)
   )
 )
+
+// if we want to persist session of logged user 
+// store.dispatch(tryToLogInWithJWT())

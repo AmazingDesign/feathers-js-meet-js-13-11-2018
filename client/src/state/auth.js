@@ -12,6 +12,27 @@ export const anonymousLogInAction = name => ({
   name
 })
 
+export const tryToLogInWithJWT = () => (dispatch, getState) => {
+  app.authenticate()
+    .then(response => {
+      console.log('Authenticated!', response)
+      return app.passport.verifyJWT(response.accessToken)
+    })
+    .then(payload => {
+      console.log('JWT Payload', payload)
+      return app.service('users').get(payload.userId)
+    })
+    .then(user => {
+      app.set('user', user)
+      dispatch(logInAction(user.email))
+      console.log('User', app.get('user'))
+    })
+    .catch((error) => {
+      console.log(error)
+      alert(`Error with log in! Message from server: ${error.data.message}`)
+    })
+}
+
 export const logInAsyncAction = (email, password) => (dispatch, getState) => {
   // https://docs.feathersjs.com/api/authentication/client.html#appauthenticateoptions
   app.authenticate({
